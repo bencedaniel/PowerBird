@@ -76,61 +76,9 @@ export const MESSAGES = {
     CATEGORY_UPDATED: "Category updated!",
     CATEGORY_DELETED: "Category deleted",
     
-    // Daily Timetable
-    DAILY_TIMETABLE_CREATED: "Day created!",
-    DAILY_TIMETABLE_UPDATED: "Day updated!",
-    TIMETABLE_ELEMENT_CREATED: "Competition created!",
-    TIMETABLE_ELEMENT_UPDATED: "Competition updated!",
-    
-    // Events
-    EVENT_CREATED: "Event created!",
-    EVENT_UPDATED: "Event updated!",
-    EVENT_SELECTED: "Event selected!", // + event name appended
-    
-    // Entries
-    ENTRY_CREATED: "Entry created!",
-    ENTRY_UPDATED: "Entry updated!",
-    
-    // Horse
-    HORSE_CREATED: "Horse created!",
-    HORSE_UPDATED: "Horse updated!",
-    
-    // Lunger
-    LUNGER_CREATED: "Lunger created!",
-    LUNGER_UPDATED: "Lunger updated!",
-    
-    // Mapping
-    MAPPING_CREATED: "Mapping created!",
-    MAPPING_UPDATED: "Mapping updated!",
-    MAPPING_DELETED: "Mapping deleted!",
-    
-    // Orders
-    STARTING_ORDER_UPDATED: "Starting order updated.",
-    CONFLICTS_CONFIRMED: "Conflicts confirmed. You can now create the starting order.",
-    
-    // Results
-    RESULT_CALC_TEMPLATE_CREATED: "Result calculation template created.",
-    RESULT_CALC_TEMPLATE_EDITED: "Result calculation template edited.",
-    RESULT_GENERATOR_CREATED: "Result generator created.",
-    RESULT_GENERATOR_EDITED: "Result generator edited.",
-    RESULT_GENERATOR_STATUS_UPDATED: "Result generator status updated.",
-    RESULT_GENERATOR_DELETED: "Result generator deleted.",
-    RESULT_GROUP_CREATED: "Result group created.",
-    RESULT_GROUP_EDITED: "Result group edited.",
-    RESULT_GROUP_DELETED: "Result group deleted.",
-    RESULT_GROUPS_GENERATED: "Result groups generated.",
-    
-    // Score Sheets
-    SCORE_SHEET_TEMPLATE_CREATED: "Template created!",
-    SCORE_SHEET_TEMPLATE_UPDATED: "Template updated!",
-    SCORE_SHEET_SAVED: "Scoresheet saved!",
-    SCORE_RECALCULATED: "Score recalculated",
-    
-    // Vaulter
-    VAULTER_CREATED: "Vaulter created!",
-    VAULTER_UPDATED: "Vaulter updated!",
-    ARM_NUMBER_UPDATED: "Arm number updated!",
-    
+
+ 
+
     // Cards, Permissions, Roles, Users (DELETE responses)
     CARD_DELETE_RESPONSE: "Card deleted.",
     PERMISSION_DELETE_RESPONSE: "Permission deleted.",
@@ -140,32 +88,9 @@ export const MESSAGES = {
     // Alert & Entry
     ALERT_DELETED: "Alert deleted",
     INCIDENT_DELETED: "Incident deleted",
-    VET_STATUS_UPDATED: "Vet status updated",
     
-    // Horse
-    NOTE_DELETED: "Note deleted",
-    NOTE_ADDED: "Note added!",
-    NUMBERS_UPDATED: "Numbers updated!",
-    
-    // Responsible Person & Events
-    RESPONSIBLE_PERSON_DELETED: "Person responsible deleted by ",
-    RESPONSIBLE_PERSON_ADDED: "Person responsible added!",
-    EVENT_DELETED: "Event deleted",
-    
-    // DailyTimeTable
-    DAILY_TIMETABLE_DELETED: "Day deleted.",
-    TIMETABLE_ELEMENT_DELETED: "Competition element deleted.",
-    
-    // Result Calc Template
-    RESULT_CALC_TEMPLATE_DELETED: "Calculation template deleted.",
-    
-    // Entry
-    ENTRY_DELETED: "Entry deleted",
-    VAULTER_UPDATED: "Vaulter updated!",
-    INCIDENT_ADDED: "Incident added!",
-    
-    // Judges
-    JUDGE_INPUT_RECEIVED: "Judge input received!"
+
+
   },
 
   // ERROR: Hibák, hiányzó adatok, érvénytelen műveletek
@@ -180,35 +105,12 @@ export const MESSAGES = {
     TOO_MANY_REQUESTS: "Too many requests from this IP, please try again later.",
     PERMISSION_NOT_FOUND: "Permission not found.",
     ROLE_NOT_FOUND: "Role not found.",
-    CATEGORY_NOT_FOUND: "Category not found",
-    DAILY_TIMETABLE_NOT_FOUND: "Day not found",
-    TIMETABLE_ELEMENT_NOT_FOUND: "Competition element not found",
-    PARENT_DAY_MISSING: "Parent day missing",
-    VAULTER_NOT_FOUND: "Vaulter not found",
-    SCORE_NOT_FOUND: "Score not found",
-    RESULT_GROUP_NOT_FOUND: "Result group not found.",
+
     TEMPLATE_NOT_FOUND: "Template not found",
     PAGE_NOT_FOUND: "Page not found",
-    NO_EVENT_SELECTED: "No event selected",
+
     
-    // Timetable & Order
-    NO_TIMETABLE_TODAY: "No competition for today",
-    DRAWING_NOT_DONE: "Drawing not done yet for this competition",
-    CONFLICTS_NOT_CHECKED: "Conflicts not checked yet for this competition",
-    TIMETABLE_PART_NOT_FOUND: "Competition not found",
-    TIMETABLE_PART_NOT_FOUND_FOR_THIS_DAY: "Competition not found for this day",
-    NO_STARTING_ORDER: "No starting order set for this competition.",
-    INVALID_TIMETABLE_PART: "Invalid competition.",
-    TIMETABLE_PART_NOT_DEFINED: "Selected competition is not defined for this result group.",
-    INVALID_ORDER_DATA: "Invalid order data. Please provide a valid entry ID and a new order number greater than 0.",
-    
-    // Scoring & Judges
-    SCORE_ALREADY_SUBMITTED: "You have already submitted a score sheet for this entry in this competition",
-    NOT_ASSIGNED_AS_JUDGE: "You are not assigned as a judge for this competition",
-    NO_ROLE_MAPPING: "No scoresheet mapping found for your judge table in this competition",
-    ENTRY_NOT_FOUND: "Entry not found",
-    NO_SCORE_SHEET_TEMPLATE: "No score sheet template found for this configuration",
-    
+
     // Validation
     PERCENTAGE_SUM_ERROR: "The sum of the percentages must be 100.",
     INVALID_CREATION_METHOD: "Invalid creation method selected.",

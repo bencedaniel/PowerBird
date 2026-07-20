@@ -12,7 +12,6 @@ import RoleSchema from './Role.js';
  * @property {String} username - Felhasználónév (egyedi, kötelező).
  * @property {String} fullname - Teljes név (kötelező).
  * @property {String} password - Jelszó (hash-elve tárolva, kötelező).
- * @property {String} feiid - FEI-azonosító (8 karakter, opcionális, egyedi).
  * @property {Boolean} active - Aktív-e a felhasználó (alapértelmezetten true, kötelező).
  * @property {ObjectId} role - Szerepkör azonosító (roles kollekció, kötelező).
  * @property {Date} createdAt - Létrehozás időpontja (automatikus).
@@ -45,23 +44,6 @@ const userSchema = new mongoose.Schema({
         password:{
             type: String,
             required: [true, 'Password required!'],
-        },
-        /**
-         * FEI-azonosító (8 karakter, opcionális, egyedi).
-         * Üres stringből undefined lesz.
-         */
-        feiid:{
-            type: String,
-            set: v => v === '' || v == null || v == undefined ? undefined : v, // Üres stringből undefined
-          validate: {
-            validator: function (value) {
-              return value == undefined || value.length === 8;
-            },
-            message: 'FEI ID must be 8 characters!'
-          },
-          required: false,
-          sparse: true,
-          unique: true,
         },
         /**
          * Aktív-e a felhasználó.

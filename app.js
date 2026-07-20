@@ -12,7 +12,6 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { JWT_CONFIG, COOKIE_CONFIG } from './config/index.js';
 import { MONGODB_URI, PORT, SECRET_ACCESS_TOKEN, SECURE_MODE, SECRET_API_KEY, TESTDB, TRUST_PROXY, DOMAIN, TIMEOUT,BACKUP_CONTAINER} from './config/env.js';
-import Event from './models/Event.js';
 import Alert from './models/Alert.js';
 import { StoreUserWithoutValidation } from './middleware/Verify.js';
 import setupRoutes from './routes/index.js';
@@ -26,7 +25,7 @@ import { speedTracker } from './middleware/speedTracker.js';
 // ============================================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const version = '1.1.1';
+const version = '0.0.1';
 
 const app = express();
 
@@ -133,7 +132,6 @@ app.use(async (req, res, next) => {
     res.locals.test = TESTDB === 'true';
     res.locals.alerts = await Alert.find({ active: true }).populate('permission');
     res.locals.parent = '/dashboard';
-    res.locals.selectedEvent = await Event.findOne({ selected: true });
     res.locals.version = version;
     res.locals.timeout = parseInt(TIMEOUT, 10);
     res.locals.backup_container = BACKUP_CONTAINER === 'true';
@@ -143,7 +141,6 @@ app.use(async (req, res, next) => {
     res.locals.alerts = [];
     res.locals.test = false;
     res.locals.parent = '/dashboard';
-    res.locals.selectedEvent = null;
     res.locals.version = version;
     res.locals.timeout = parseInt(TIMEOUT, 10);
     res.locals.backup_container = BACKUP_CONTAINER === 'true';
@@ -195,7 +192,7 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
   logInfo('---------------------------------------------');
-  logInfo('VaultingEventEcosystemScoring server startup');
+  logInfo('PowerBird server startup');
   logInfo(`Start time: ${new Date().toISOString()}`);
   logInfo(`Environment: ${process.env.NODE_ENV || 'development'}`);
   logWarn('VERSION', `Version: ${version}`);

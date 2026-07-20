@@ -21,7 +21,7 @@ const generate2FACode = asyncHandler(async (req, res) => {
     // Generálunk egy URI-t, amit az authenticator appok megértenek
     // Formátum: generateURI({ issuer, label, secret })
     const otpauthUrl = generateURI({
-        issuer: 'VaultX',
+        issuer: 'PowerBird', // A szolgáltatás neve, ami megjelenik az authenticator appban
         label: user.username,
         secret
     });
