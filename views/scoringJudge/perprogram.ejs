@@ -1,0 +1,121 @@
+<div class="container my-4 border border-black border-1 border-opacity-25 rounded p-2" >
+  <ul class="list-group">
+
+    <li class="list-group-item border-0">
+        <h3 class="text-center">Scoring view</h3>
+        <h5 class="text-center">Program name: <%= timetablePart.Name %></h5>
+        <div class="d-flex justify-content-center align-items-center mb-2 px-5">
+        <h6 class="text-center px-3 m-1 border-1 border rounded">Start time: <%= timetablePart.StartTimePlanned.toLocaleString("hu-HU") %></h6>
+        <h6 class="text-center px-3 m-1 border-1 border rounded">Round: <%= timetablePart.Round %></h6>
+        <h6 class="text-center px-3 m-1 border-1 border rounded">Test type: <%= timetablePart.TestType %></h6>
+        <h6 class="text-center px-3 m-1 border-1 border rounded">Number of starters: <%= timetablePart.StartingOrder.length %></h6>
+        </div>
+        <div class="d-flex justify-content-center align-items-center mb-2 px-5">
+        <h6 class="text-center px-3 m-1 border-1 border rounded">Table: <%= tablebyJudge %></h6>
+        <h6 class="text-center px-3 m-1 border-1 border rounded">Judge name: <%= judgeName %></h6>
+        </div>
+    </li>
+
+  </ul>
+<div class="d-flex justify-content-start align-items-center w-100 shadow-sm p-1 mb-4 bg-secondary bg-opacity-25 rounded border border-1 border-black border-opacity-10 flex-grow-1">
+    <div class="w-50 d-flex m-1 ">
+        <form class="form-inline w-75 "id="noSubmitForm">
+          <input class="form-control mr-sm-2 rounded-0 rounded-start-1 border " type="search" placeholder="Search" aria-label="Search" id="search">
+        </form>
+        <div class="dropdown w-50 ">
+            <button class="btn btn-primary dropdown-toggle rounded-0 rounded-end-1 " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Select search column">
+              Select column
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownMenu">
+
+            </div>
+
+        </div>
+  </div>
+
+  </div>
+
+<table class="table table-striped table-hover table-bordered w-100 m-0" id="TableBody">
+        <thead class="table-primary">
+            <th scope="col">Order nr.</th>
+            <th scope="col">Vaulter(s)</th>
+            <th scope="col">Lunger</th>
+            <th scope="col">Horse</th>
+            <th scope="col">Category</th>
+            <th scope="col" width="15%">&nbsp;</th>
+
+        </thead>
+        <tbody class="align-middle" id="TableBody">
+
+
+              <% timetablePart.StartingOrder
+                  .slice()
+                  .sort((a, b) => a.Order - b.Order)
+                  .forEach(order => { %>
+        <% const scoreSheetSubmittedForEntry = ScoreSheetsSubmitted.some(sheet => sheet.EntryId.toString() === order.Entry._id.toString()); %>
+
+      <tr>
+        <td class="<%= scoreSheetSubmittedForEntry ? 'bg-success bg-opacity-25' : '' %>"><%= order.Order %></td>
+        <% const entry = order.Entry; %>
+        <td class="<%= scoreSheetSubmittedForEntry ? 'bg-success bg-opacity-25' : '' %>"><%= entry.vaulter.map(v => v.Name).join(', ') %></td>
+        <td class="<%= scoreSheetSubmittedForEntry ? 'bg-success bg-opacity-25' : '' %>"><%= entry && entry.lunger ? entry.lunger.Name : '' %></td>
+        <td class="<%= scoreSheetSubmittedForEntry ? 'bg-success bg-opacity-25' : '' %>"><%= entry && entry.horse ? entry.horse.Horsename : '' %></td>
+        <td  class="<%= scoreSheetSubmittedForEntry ? 'bg-success bg-opacity-25' : '' %>"><%= entry && entry.category ? entry.category.CategoryDispName : '' %></td>
+
+
+        <td class=" <%= scoreSheetSubmittedForEntry ? 'bg-success bg-opacity-25' : '' %> text-center">
+            <button type="button" class="btn btn-info btn-sm shadow-none m-1"onclick="location.href='/scoring/newscoresheet/<%= order.Entry._id%>/<%= timetablePart._id%>'" <%= judgeName === "Not authorized judge" || scoreSheetSubmittedForEntry ? 'disabled': '' %> >Add scoresheet</button>
+      </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let IdToDelete = null;
+    const deleteModal = document.getElementById('deleteModal');
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+
+    deleteModal?.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        IdToDelete = button.getAttribute('data-timetablepartid');
+    });
+
+    confirmDeleteButton?.addEventListener('click', () => {
+        fetch('/dailytimetable/deleteTTelement/' + IdToDelete, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                window.location.reload();
+            }
+        });
+    });
+
+    let IdToSave = null;
+    const saveModal = document.getElementById('saveModal');
+    const confirmSaveButton = document.getElementById('confirmSaveButton');
+
+    saveModal?.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        IdToSave = button.getAttribute('data-timetablepartid');
+    });
+
+    confirmSaveButton?.addEventListener('click', () => {
+        fetch('/dailytimetable/saveTTelement/' + IdToSave, {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                window.location.reload();
+            }
+        });
+    });
+});
+</script>
+
+</script>

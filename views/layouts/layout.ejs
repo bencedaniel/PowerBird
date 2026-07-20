@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% if (typeof noindex !== 'undefined' && noindex) { %>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <% } %>
+    <title>VaultX</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/static/custom.css">
+
+    <link rel="icon" type="image/x-icon" href="/static/VaultXLogo.png">
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+ 
+
+</head>
+    <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <!-- Logo -->
+
+    <a class="navbar-brand" href="/">
+      <img src="/static/VaultXLogo.png" alt="VaultX Logo" class="img-fluid" style="max-height: 80px;">
+    </a>
+
+    <!-- Hamburger button mobilhoz -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+<div class="collapse navbar-collapse  " id="navbarNav">
+  <ul class="navbar-nav ms-auto bg-secondary rounded bg-opacity-25  mt-2">
+
+        <%
+          // If not defined, use an empty array
+          const permissons = typeof rolePermissons !== "undefined" ? rolePermissons : [];
+        %>
+
+        <% if (Array.isArray(permissons) && permissons.includes("admin_dashboard")) { %>
+           <li class="nav-item">
+            <a href="/admin/dashboard" class="nav-link btn btn-primary m-1 px-2 d-flex align-items-center">
+                <i class="bi bi-menu-button-wide fs-5 pe-2"></i>Admin dashboard</a>
+          </li>
+        <% } %>
+                <% if (Array.isArray(permissons) && permissons.includes("office_dashboard")) { %>
+           <li class="nav-item">
+            <a href="/admin/officedash" class="nav-link btn btn-primary m-1 px-2 d-flex align-items-center">
+                <i class="bi bi-menu-button-wide fs-5 pe-2"></i>Office dashboard</a>
+          </li>
+        <% } %>
+        <% if (Array.isArray(permissons) && permissons.length !== 0) { %>
+
+           <li class="nav-item">
+            <a href="/dashboard" class="nav-link btn btn-primary m-1 px-2 d-flex align-items-center">
+                <i class="bi bi-menu-button-wide fs-5 pe-2"></i>Dashboard</a>
+          </li>
+        <% } %>
+
+        <% if (Array.isArray(permissons) && permissons.length !== 0) { %>
+
+          <li class="nav-item">
+          <a href="/profile/<%= typeof user !== 'undefined' ? user._id : '' %>"
+            class="nav-link btn btn-secondary m-1 px-2 d-flex align-items-center">
+            <i class="bi bi-person fs-5 pe-2"></i>
+            <%= typeof user !== 'undefined' ? user.username : '' %>
+          </a>
+          </li>
+                    <li class="nav-item">
+            <a href="/logout" class="nav-link btn btn-danger m-1 px-2 d-flex align-items-center">
+                <i class="bi bi-box-arrow-right fs-5"></i></a>
+          </li>
+
+          </li>
+                    <li class="nav-item">
+            <a id="alertButton" onclick="openAlertBox()" class="nav-link btn btn-warning m-1 px-2 d-flex align-items-center has-badge" role="button" aria-label="Alerts">
+            <i class="bi bi-bell-fill fs-5" aria-hidden="true"></i>
+                    <span class="icon-badge bg-danger text-white rounded-circle d-none" id="alertCounter" aria-hidden="true"></span>
+               </a>
+          </li>
+          </li>
+                    <li class="nav-item">
+            <a id="hintButton" onclick="openHint()" class="nav-link btn btn-info m-1 px-2 d-flex align-items-center has-badge" role="button" aria-label="Alerts">
+            <i class="bi bi-question-circle-fill fs-5" aria-hidden="true"></i>
+               </a>
+          </li>
+        <% } %>
+        <%
+          const safeFormData = (typeof formData !== 'undefined' && formData) ? formData : null;
+          const pid = safeFormData && safeFormData.parent ? String(safeFormData.parent) : '';
+          const dtId = safeFormData && safeFormData.dailytimetable ? String(safeFormData.dailytimetable._id || safeFormData.dailytimetable) : '';
+        %>
+        <% if (parent && parent.includes(':did')) { %>
+            <li class="nav-item">
+            <a href="<%= parent.split(':did')[0] + dtId %>" class="nav-link btn btn-primary m-1 px-2 d-flex align-items-center">
+                <i class="bi bi-arrow-return-left fs-5 pe-2"></i> Back</a>
+          </li>
+          <% } else if (parent && parent.includes(':pid')) { %>
+            <li class="nav-item">
+            <a href="<%= parent.split(':pid')[0] + pid %>" class="nav-link btn btn-primary m-1 px-2 d-flex align-items-center">
+                <i class="bi bi-arrow-return-left fs-5 pe-2"></i> Back</a>
+
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a href="<%= parent %>" class="nav-link btn btn-primary m-1 px-2 d-flex align-items-center">
+                <i class="bi bi-arrow-return-left fs-5 pe-2"></i> Back</a>
+          </li>
+        <% } %>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="container mb-5 my-5"  style="padding-bottom: 80px;">
+  <div id="toastContainer"></div>
+
+<% if (typeof successMessage !== 'undefined' && successMessage) { %>
+  <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 9999;">
+    <div id="formSuccessToast" class="toast align-items-center text-white bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          <%= successMessage %>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+<% } %>
+<% if (typeof failMessage !== 'undefined' && failMessage) { %>
+  <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 9999;">
+    <div id="formFailToast" class="toast align-items-center text-white bg-danger border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          <%= failMessage %>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+    <%- body %>
+
+<% if (typeof helpMessage === 'undefined') { var helpMessage = null; } %>
+<!-- Hint modal -->
+<div class="modal fade" id="HintViewModal" tabindex="-1" aria-labelledby="HintViewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title text-center" id="HintViewModalLabel">Hint for this page</h5>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+
+        <% if (helpMessage && helpMessage.HelpMessage) { %>
+          <div class="w-100 bg-<%=helpMessage.style%> bg-opacity-25 border border-<%=helpMessage.style%> rounded p-3 mt-2 mb-2">
+            <p><%= helpMessage.HelpMessage %></p>
+          </div>
+        <% } else { %>
+          <div class="w-100 bg-secondary bg-opacity-25 border border-info rounded p-3 mt-2 mb-2">
+            <p>No hint available for this page.</p>
+          </div>
+        <% } %>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Alert modal -->
+<div class="modal fade" id="AlertViewModal" tabindex="-1" aria-labelledby="AlertViewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title text-center" id="AlertViewModalLabel">Ongoing alerts</h5>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+          <% let numberofalerts=0 %>
+          <% alerts.forEach(element => { %>
+
+          <% if (element.active && Array.isArray(permissons) && permissons.includes(element.permission)) { %>
+
+                <div class="w-100 bg-<%=element.style%> bg-opacity-25 border border-<%=element.style%> rounded p-3 mt-2 mb-2">
+                    <h5><%= element.title %><span class="h6 opacity-25 ps-5"><%= element.style == 'primary' ? '(System alert)' : '' %></span></h5>
+                    <hr>
+                    <p><%= element.description %></p>
+                    <% numberofalerts++ %>
+                </div>
+          <% } %>
+          <% }) %>
+          <% if (numberofalerts == 0) { %>
+            <div class="w-100 bg-success bg-opacity-25 border border-success rounded p-3 mt-2 mb-2">
+                    <h5>No alerts found</h5>
+                </div>
+
+          <% } %>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Event modal (teljesen lezárva) -->
+<div class="modal fade" id="EventViewModal" tabindex="-1" aria-labelledby="EventViewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title text-center" id="EventViewModalLabel">Event details</h5>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="mb-4 border rounded p-3 bg-primary bg-opacity-10 border-primary">
+          <h5 class="h5 text-center border-bottom pb-2 border-primary">Basic information</h5>
+        <p class="mt-3"><strong>Event name:</strong> <%= selectedEvent?.EventName || 'N/A' %> </p>
+        <p class="mt-3"><strong>Location:</strong> <%= selectedEvent?.EventLocation || 'N/A' %> </p>
+        <p class="mt-3"><strong>Director name:</strong> <%= selectedEvent?.EventDirectorName || 'N/A' %> </p>
+        <p class="mt-3 ms-4"><strong>Contact:</strong> <%= selectedEvent?.EventDirectorContact || 'N/A' %> </p>
+        </div>
+        <div class="mb-4 border rounded p-3 bg-danger bg-opacity-10 border-danger " style="max-height: 40vh; overflow: auto;">
+        <h5 class="h5 text-center border-bottom pb-2 border-danger mb-3">Officials</h5>
+        <% selectedEvent?.AssignedOfficials.forEach(element => { %>
+          <div class=" mb-3 d-flex flex-row gap-4 border-bottom border-danger">
+  <div class="flex-fill">
+    <p ><strong>Name:</strong> <%= element.name || 'N/A' %></p>
+  </div>
+  <div class="flex-fill">
+    <p ><strong>Role:</strong> <%= element.role || 'N/A' %></p>
+  </div>
+  <div class="flex-fill">
+    <p ><strong>Contact:</strong> <%= element.contact || 'N/A' %></p>
+  </div>
+</div>
+        <% }) %>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+    <footer class="z-3">
+        <div class="container-fluid bg-dark text-light p-3 position-fixed bottom-0 pt-2 pb-4" style="z-index: 999;">
+                  <% if (Array.isArray(permissons) && permissons.length !== 0) { %>
+
+                          <p class="mb-0 position-absolute opacity-50 small bottom-0">Logout time: <span id="logouttime"></span> m</p>
+                  <% } %>
+            <div class="container d-flex justify-content-between align-items-center flex-wrap p-0">
+                <p class="mb-0"><button <% if (test) { %> onclick="showTestDbIndicator()" <% } %> class="bg-dark border-0 <%= backup_container ? "text-success": "text-white" %> text-decoration-none">VaultX</button>&copy; 2026 | v<%= version %></p>
+                <p class="mb-0"> Event: <button onclick="showEventPopup()" class="bg-dark border-0 text-white text-decoration-underline" ><%= selectedEvent?.EventName || 'N/A' %></button></p>
+
+                <div>
+                <a href="/creators" class="text-light mx-3">Creators</a>
+                 <a href="https://ticket.bencedaniel.hu/open.php" class="text-light" target="_blank">Support</a>
+                  <a href="#" class="text-decoration-none text-light ps-4 "><i class="bi bi-arrow-up border border-1 border-light rounded"></i></a>
+
+
+                </div>
+                <% if (test) { %>
+
+                      <div  id="testDbIndicator"class="alert alert-warning text-center mb-0  px-5 position-fixed border-3 border-end opacity-75" style="border-radius:0; transform: rotate(-45deg); bottom: 50px; right: -120px; width: 400px;">
+    <strong>TEST DB ACTIVE!</strong>
+  </div>
+  <% } %>
+
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+      <script>
+      window.VAULTX_EXPORT_META = {
+        systemName: <%- JSON.stringify((selectedEvent?.EventName || 'N/A').replace(/</g, '\\u003c')) %>,
+        slug: window.location.pathname.replace(/^\/+/, '') || 'root',
+        username: <%- JSON.stringify((typeof user !== 'undefined' ? user.username : '').replace(/</g, '\\u003c')) %>,
+        time: new Date().toLocaleString('hu-HU')
+      };
+    </script>
+    <script src="/static/main.js"></script>
+
+</body>
+
+<script>
+
+<% if (test) { %>
+
+    function showTestDbIndicator() {
+      const testDbIndicator = document.getElementById('testDbIndicator');
+      if (testDbIndicator && testDbIndicator.style.display === 'none') {
+        testDbIndicator.style.display = 'block';
+      } else if (testDbIndicator) {
+        testDbIndicator.style.display = 'none';
+      }
+
+  }
+
+  <% } %>
+
+  function showEventPopup() {
+
+    const modal = new bootstrap.Modal(document.getElementById('EventViewModal'));
+    modal.show();
+  }
+    const alertmodal = new bootstrap.Modal(document.getElementById('AlertViewModal'));
+    const hintmodal = new bootstrap.Modal(document.getElementById('HintViewModal'));
+    function getCookie(name) {
+    const cookie = document.cookie
+        .split("; ")
+        .find(row => row.startsWith(name + "="));
+
+    return cookie ? cookie.split("=")[1] : null;
+}
+    const alertCounter = <%= numberofalerts %>;
+
+  if(alertCounter != 0){
+    let alertList = [];
+    <% alerts.forEach(element => { %>
+      <% if (element.active === true) { %>
+
+      alertList.push(parseInt(<%= element.reappear%>));
+      <% } %>
+
+    <% }) %>
+
+    if (alertList.length > 0) {
+      const minimum = Math.min(...alertList)
+
+      if(!document.cookie.includes("Reappear=")){
+          alertmodal.show();
+          const value= minimum;
+          const time = value * 60;
+          document.cookie = `Reappear=${value}; max-age=${time}; path=/`;
+
+      }else{
+        cookiedata = parseInt(getCookie("Reappear"))
+        if(minimum<cookiedata){
+            const value= minimum;
+            const time = value * 60;
+            document.cookie = `Reappear=${value}; max-age=${time}; path=/`;
+
+          }
+      }
+
+    }
+  }
+    const alertCounterSpan = document.getElementById("alertCounter")
+
+    if(alertCounter != 0){
+              alertCounterSpan.innerHTML = alertCounter
+              alertCounterSpan.classList.remove("d-none");
+
+    }
+
+    function openAlertBox(){
+      alertmodal.show()
+    }
+    function openHint(){
+      hintmodal.show()
+    }
+</script>
+
+<script>
+history.pushState(null, "", location.href);
+
+window.addEventListener("popstate", function () {
+
+    <% if (parent && parent.includes(':did')) { %>
+          window.location.href = "<%= parent.split(':did')[0] + dtId %>";
+    <% } else if (parent && parent.includes(':pid')) { %>
+          window.location.href = "<%= parent.split(':pid')[0] + pid %>";
+        <% } else { %>
+            window.location.href = "<%= parent %>";
+        <% } %>
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const timeoutMinutes = parseInt("<%= timeout %>"); // Value received from EJS
+    var remaining = timeoutMinutes * 60 * 1000; // Convert minutes to milliseconds
+    document.getElementById("logouttime").innerHTML = timeoutMinutes;
+    setTimeout(() => {
+      remaining = remaining - (1 * 60 * 1000); // 1 minute before actual timeout
+      document.getElementById("logouttime").innerHTML = remaining / (60 * 1000);
+    }, 1 * 60 * 1000); // timeout minutes
+    
+    setTimeout(() => {
+        ShowErrorToast('1 minute left before auto logout due to inactivity.');
+    },  timeoutMinutes * 60 * 1000 - (1 * 60 * 1000)); // timeout minutes
+
+    setTimeout(() => {
+        window.location.reload();
+    }, timeoutMinutes * 60 * 1000); // timeout minutes
+});
+
+
+
+</script>
+
+</html>

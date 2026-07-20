@@ -1,0 +1,64 @@
+{
+    "type": "module",
+    "scripts": {
+        "start": "node app.js",
+        "test": "jest --no-coverage",
+        "test:watch": "jest --watch",
+        "test:coverage": "jest --coverage",
+        "test:coverage:report": "jest --coverage && open coverage/lcov-report/index.html",
+        "test:unit": "jest --testPathPattern='(models|LogicServices)' --no-coverage",
+        "test:integration": "jest --testPathPattern='(controllers|routes|middleware|DataServices)' --no-coverage",
+        "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
+        "lint": "eslint . --ext .js",
+        "docker:build:push": "docker buildx build --platform linux/amd64,linux/arm64 -t bencedaniel/vaultx:latest --push .",
+        "docker:build": "docker buildx build --platform linux/amd64,linux/arm64 -t bencedaniel/vaultx:latest ."
+    },
+    "dependencies": {
+        "axios": "^1.9.0",
+        "bcrypt": "^6.0.0",
+        "bootstrap": "^5.3.5",
+        "bootstrap-icons": "^1.11.3",
+        "connect-mongo": "^5.1.0",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "crypto": "^1.0.1",
+        "ejs": "^3.1.10",
+        "express": "^5.1.0",
+        "express-ejs-layouts": "^2.5.1",
+        "express-rate-limit": "^8.5.2",
+        "express-session": "^1.18.1",
+        "express-validator": "^7.2.1",
+        "icons": "^1.0.0",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.13.2",
+        "morgan": "^1.10.0",
+        "multer": "^2.0.2",
+        "otplib": "^13.4.1",
+        "qrcode": "^1.5.4",
+        "winston": "^3.17.0"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.29.2",
+        "babel-jest": "^29.7.0",
+        "babel-plugin-transform-import-meta": "^2.3.3",
+        "dotenv": "^17.3.1",
+        "jest": "^29.7.0",
+        "mongodb-memory-server": "^11.0.1",
+        "nodemon": "^3.1.10",
+        "supertest": "^7.2.2"
+    },
+    "name": "npm",
+    "version": "1.0.0",
+    "main": "app.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/C00PYRIGHT/VaultingEventEcosystemScoringFS.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/C00PYRIGHT/VaultingEventEcosystemScoringFS/issues"
+    },
+    "homepage": "https://github.com/C00PYRIGHT/VaultingEventEcosystemScoringFS#readme",
+    "description": ""
+}

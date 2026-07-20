@@ -1,0 +1,246 @@
+<div class="container my-4 border border-black border-1 border-opacity-10 rounded p-2 w-75 shadow p-3 bg-primary bg-opacity-10">
+
+  <h1 class="text-center mb-3">Edit Dashboard Card</h1>
+
+  <form action="/admin/editCard/<%= formData?._id %>" method="POST">
+    <div class="row justify-content-center g-3 m-auto">
+
+                  <!-- Status -->
+      <div class="col-md-12">
+        <div class="form-floating position-relative searchable-dropdown">
+          <i class="bi bi-chevron-down position-absolute top-50 end-0 pe-3 translate-middle-y"></i>
+          <input type="text" class="form-control shadow-none searchable-input"
+                 placeholder="Search Status"
+                 autocomplete="off"
+                 value="<%= formData ? (formData.dashtype === 'user' ? 'User' : formData.dashtype === 'admin' ? 'Admin' : 'Office') : '' %>">
+          <label class="form-label">Status</label>
+
+          <!-- Hidden input for form submission -->
+          <input type="hidden" class="searchable-hidden" name="dashtype"
+                 value="<%= formData ? formData.dashtype : '' %>">
+
+          <!-- Dropdown list -->
+          <ul class="list-group position-absolute w-100 mt-1 shadow-sm d-none searchable-list"
+              style="max-height: 200px; overflow-y: auto; z-index: 1000;">
+
+              <li class="list-group-item list-group-item-action searchable-item" val="user">User</li>
+              <li class="list-group-item list-group-item-action searchable-item" val="admin">Admin</li>
+              <li class="list-group-item list-group-item-action searchable-item" val="office">Office</li>
+          </ul>
+        </div>
+      </div>
+                  <!-- Priority -->
+      <div class="col-md-12">
+        <div class="form-floating">
+          <input type="number" class="form-control shadow-none" id="priority" name="priority" placeholder="priority" max="100" min="1"
+            value="<%= formData?.priority || '' %>">
+          <label for="priority">Priority</label>
+        </div>
+      </div>
+
+      <%
+  const styleDisplayMap = {
+    primary: 'Primary',
+    secondary: 'Secondary',
+    success: 'Success',
+    danger: 'Danger',
+    warning: 'Warning',
+    info: 'Info',
+    dark: 'Dark'
+  };
+  const selectedStyleDisplay = formData && formData.style ? (styleDisplayMap[formData.style] || formData.style) : '';
+%>
+            <!-- Style -->
+      <div class="col-md-12">
+        <div class="form-floating position-relative searchable-dropdown">
+          <i class="bi bi-chevron-down position-absolute top-50 end-0 pe-3 translate-middle-y"></i>
+          <input type="text" class="form-control shadow-none searchable-input"
+                 placeholder="Search Style"
+                 autocomplete="off"
+                 value="<%= selectedStyleDisplay %>">
+          <label class="form-label">Style</label>
+          <!-- Hidden input for form submission -->
+          <input type="hidden" class="searchable-hidden" name="style" id="style"
+                 value="<%= formData ? formData.style : '' %>">
+
+          <!-- Dropdown list -->
+          <ul class="list-group position-absolute w-100 mt-1 shadow-sm d-none searchable-list"
+              style="max-height: 200px; overflow-y: auto; z-index: 1000;">
+
+            <li class="list-group-item list-group-item-action searchable-item" val="primary">Primary</li>
+            <li class="list-group-item list-group-item-action searchable-item" val="secondary">Secondary</li>
+            <li class="list-group-item list-group-item-action searchable-item" val="success">Success</li>
+            <li class="list-group-item list-group-item-action searchable-item" val="danger">Danger</li>
+            <li class="list-group-item list-group-item-action searchable-item" val="warning">Warning</li>
+            <li class="list-group-item list-group-item-action searchable-item" val="info">Info</li>
+            <li class="list-group-item list-group-item-action searchable-item" val="dark">Dark</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="form-floating position-relative searchable-dropdown">
+          <i class="bi bi-chevron-down position-absolute top-50 end-0 pe-3 translate-middle-y"></i>
+          <input type="text" class="form-control shadow-none searchable-input"
+                 placeholder="Search permission"
+                 autocomplete="off"
+                 <% if (formData) { %>
+                 <% permissionList.forEach(element => { %>
+                    <% if (String(element.name) === String(formData.perm)) { %>
+                      value="<%= element.displayName %>"
+                    <% } %>
+                 <% }) %>
+                  <% }%>
+
+                  >
+          <label class="form-label">Permission</label>
+          <!-- Hidden input for form submission -->
+          <input type="hidden" class="searchable-hidden" name="perm" id="perm"
+                 value="<%= formData ? formData.perm : '' %>">
+
+          <!-- Dropdown list -->
+          <ul class="list-group position-absolute w-100 mt-1 shadow-sm d-none searchable-list"
+              style="max-height: 200px; overflow-y: auto; z-index: 1000;">
+              <% permissionList.forEach(element => { %>
+              <li class="list-group-item list-group-item-action searchable-item" val="<%= element.name %>" ><%= element.displayName %></li>
+
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <div class="col-md-12">
+        <div class="form-floating">
+          <input type="text" class="form-control shadow-none" id="title" name="title" placeholder="Title"
+            value="<%= formData?.title || '' %>">
+          <label for="title">Title</label>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="col-md-12">
+        <div class="form-floating">
+          <input type="text" class="form-control shadow-none" id="text" name="text" placeholder="Text"
+            value="<%= formData?.text || '' %>">
+          <label for="text">Text</label>
+        </div>
+      </div>
+
+      <!-- Links (array) -->
+      <div class="col-md-12 bg-secondary bg-opacity-10 p-3 rounded mt-3">
+        <label class="form-label mb-2">Links</label>
+        <div id="linkList"></div>
+        <button type="button" class="btn btn-sm btn-success mt-2" onclick="addLinkInput()">+ Add Link</button>
+      </div>
+
+      <!-- Submit -->
+      <div class="col-md-12 d-flex">
+        <button type="button" class="btn btn-secondary mt-3 w-50 m-1" onclick="showCardPopup()">Preview</button>
+        <button type="submit" class="btn btn-primary mt-3 w-50 m-1">Edit Card</button>
+      </div>
+
+              <div class="modal fade" id="CardViewModal" tabindex="-1" aria-labelledby="CardViewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+              <h5 class="modal-title text-center" id="CardViewModalLabel">Card preview</h5>
+              <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
+            </div>
+            <div id="CardDiv" class="modal-body d-flex justify-content-center text-center g-4">
+
+             </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </form>
+</div>
+
+<script>
+function addLinkInput(href = '', label = '') {
+  const linkList = document.getElementById('linkList');
+
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('mb-2', 'd-flex', 'gap-2');
+
+  const hrefInput = document.createElement('input');
+  hrefInput.type = 'text';
+  hrefInput.name = 'href[]';
+  hrefInput.placeholder = 'Link Href';
+  hrefInput.classList.add('form-control');
+  hrefInput.value = href;
+
+  const labelInput = document.createElement('input');
+  labelInput.type = 'text';
+  labelInput.name = 'label[]';
+  labelInput.placeholder = 'Link Label';
+  labelInput.classList.add('form-control');
+  labelInput.value = label;
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.textContent = 'Remove';
+  btn.classList.add('btn', 'btn-danger');
+  btn.onclick = () => wrapper.remove();
+
+  wrapper.appendChild(hrefInput);
+  wrapper.appendChild(labelInput);
+  wrapper.appendChild(btn);
+
+  linkList.appendChild(wrapper);
+}
+
+// --- reload from EJS ---
+<% if (formData?.label) { %>
+  <% for( let index = 0; index < formData.label.length; index++ ) { %>
+        addLinkInput("<%= formData.href[index] %>", "<%= formData.label[index] %>");
+
+<% } %>
+
+<% } %>
+</script>
+
+<script>
+
+    function showCardPopup() {
+      const modal = new bootstrap.Modal(document.getElementById('CardViewModal'));
+      const cardDiv = document.getElementById('CardDiv');
+
+      let buttons = [];
+      const style = document.getElementById('style').value;
+      const title = document.getElementById('title').value;
+      const text = document.getElementById('text').value;
+      const linkList = document.getElementById('linkList');
+      Array.from(linkList.children).forEach(element => {
+        element.children[1] ? buttons.push(element.children[1].value) : null;
+      });
+      let buttonsHtml = [];
+      console.log(buttons);
+      buttons.forEach(button => {
+        buttonsHtml.push(`<a href="" class="btn btn-outline-${style} w-100 mb-3">${button}</a>
+`);
+      });
+
+      cardDiv.innerHTML = ` <div class="col-md-4 w-100" style="max-width: 310px;">
+                <div class="p-4 bg-${style} bg-opacity-10 border border-1 border-black border-opacity-10 rounded h-100 d-flex flex-column justify-content-between">
+                  <h5 id="CardTitle">${title}</h5>
+                  <p id="CardText">${text}</p>
+                  <div id="ButtonDiv">
+                    ${buttonsHtml.join('\n')}
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+      `;
+    modal.show();
+  }
+</script>

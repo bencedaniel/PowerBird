@@ -1,0 +1,224 @@
+<div class="container my-3 border border-black border-1 border-opacity-10 rounded p-3 shadow bg-primary bg-opacity-10" style="max-width: 100vh;">
+
+  <form action="/scoring/office/newscoresheet" method="POST">
+    <div class="row justify-content-center m-auto">
+    <div id="imageStageWrapper" class=" position-relative" style="width: 100%; max-width: 800px; margin: 0 auto;">
+          <img id="bgImage" src="<%= scoresheetTemp?.bgImage || '' %>" alt="Background" style="width: 100%; height: auto;">
+          <% scoresheetTemp.outputFieldList.forEach((outputElement, idx) => { %>
+          <div
+            class="text-center"
+            id="output-<%= outputElement.contentid %>"
+            data-index="<%= idx %>"
+            data-type="output"
+            style="
+              position: absolute;
+              left: <%= outputElement.position.x %>%;
+              top: <%= (Number(outputElement.position.y).toFixed(1)) %>%;
+              transform: translate(-50%, -50%);
+              overflow: hidden;
+              padding: 2px;
+              width: <%= outputElement.position.w || 100 %>%;
+              cursor: pointer;
+              font-size: 0.9rem;
+            "
+            "
+            title=""
+          >
+            <%= outputElement.name%>
+          </div>
+
+          <% }) %>
+
+        <% scoresheetTemp.inputFieldList.forEach((inputElement, idx) => { %>
+          <input
+            type="text"
+            class="form-control border border-2 border-dark border-opacity-75 text-center input-field"
+            id="input-<%= inputElement.id %>"
+            placeholder=""
+            data-index="<%= idx %>"
+            name="ScoreSheetInput[<%= inputElement.id %>]"
+            data-type="input"
+            style="
+              position: absolute;
+              left: <%= inputElement.position.x %>%;
+              top: <%= Number(inputElement.position.y).toFixed(1) %>%;
+              transform: translate(-50%, -50%);
+              width: <%= inputElement.position.w || 100 %>%;
+              padding: 2px;
+            "
+            data-id="<%= inputElement.id %>"
+          >
+        <% }) %>
+       </div>
+
+      </div>
+      <input type="hidden" name="EntryId" value="<%= entry._id %>">
+      <input type="hidden" name="TimetablePartId" value="<%= timetablePart._id %>">
+      <input type="hidden" name="EventId" value="<%= event._id %>">
+      <input type="hidden" name="TemplateId" value="<%= scoresheetTemp._id %>">
+      <input type="hidden" name="Judge[userId]" value="<%= judgeID %>">
+      <input type="hidden" name="Judge[table]" value="<%= judgesTable %>">
+      <input type="hidden" name="totalScoreFE" id="totalScore" value="">
+
+      <!-- Submit Button -->
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary w-100">Submit scores</button>
+      </div>
+    </div>
+</form>
+</div>
+
+<script>
+  // Store original widths from template
+
+</script>
+
+<style>
+  .output-field, .input-field {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+  .output-field:hover, .input-field:hover {
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    opacity: 0.9;
+  }
+</style>
+
+<script>
+  // Initialize scoresheet configuration for calculations
+  window.scoresheetConfig = {};
+  
+  <% if (scoresheetTemp.typeOfScores == "artistic" && scoresheetTemp.TestType.includes("free test")) { %>
+    window.scoresheetConfig.artisticCH = <%= entry.category.Artistic?.CH || 0 %>;
+    window.scoresheetConfig.artisticC1 = <%= entry.category.Artistic?.C1 || 0 %>;
+    window.scoresheetConfig.artisticC2 = <%= entry.category.Artistic?.C2 || 0 %>;
+    window.scoresheetConfig.artisticC3 = <%= entry.category.Artistic?.C3 || 0 %>;
+    window.scoresheetConfig.artisticC4 = <%= entry.category.Artistic?.C4 || 0 %>;
+  <% } else if( scoresheetTemp.TestType.includes("technical test")){%>
+    window.scoresheetConfig.artistictechCH = <%= entry.category.TechArtistic?.CH || 0 %>;
+    window.scoresheetConfig.artisticT1 = <%= entry.category.TechArtistic?.T1 || 0 %>;
+    window.scoresheetConfig.artisticT2 = <%= entry.category.TechArtistic?.T2 || 0 %>;
+    window.scoresheetConfig.artisticT3 = <%= entry.category.TechArtistic?.T3 || 0 %>;
+    window.scoresheetConfig.techDivider = <%= entry.category.TechArtistic?.TechDivider || 1 %>;
+  <% } else if (scoresheetTemp.typeOfScores == "technical" && scoresheetTemp.TestType.includes("free test")){%>
+    window.scoresheetConfig.Rmultipler = <%= entry.category.Free?.R || 0 %>;
+    window.scoresheetConfig.Dmultipler = <%= entry.category.Free?.D || 0 %>;
+    window.scoresheetConfig.Mmultipler = <%= entry.category.Free?.M || 0 %>;
+    window.scoresheetConfig.Emultipler = <%= entry.category.Free?.E || 0 %>;
+    window.scoresheetConfig.NumberOfMaxExercises = <%= entry.category.Free?.NumberOfMaxExercises || 1 %>;
+  <% } %>
+  <% if (scoresheetTemp.typeOfScores == "horse") { %>
+    window.scoresheetConfig.a1percentage = <%= entry.category.Horse?.A1 || 0 %>;
+    window.scoresheetConfig.a2percentage = <%= entry.category.Horse?.A2 || 0 %>;
+    window.scoresheetConfig.a3percentage = <%= entry.category.Horse?.A3 || 0 %>;
+  <% } %>
+</script>
+
+<script src="/static/scoresheet-calculations.js"></script>
+<script>
+  // Define refreshOutputField locally for DOMContentLoaded block
+  function refreshOutputField(id, value) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.innerHTML = value;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const event = <%- JSON.stringify(event || {}) %>;
+    const timetablePart = <%- JSON.stringify(timetablePart || {}) %>;
+    const entry = <%- JSON.stringify(entry || {}) %>;
+    const JudgeName = "<%= judgeName || '' %>";
+    const JudgesTable = "<%= judgesTable || '' %>";
+
+    // Data mappings for output fields
+    const date = timetablePart?.dailytimetable?.Date ? new Date(timetablePart.dailytimetable.Date).toLocaleDateString("Hu") : '';
+    refreshOutputField('output-date', date);
+
+    const eventname = event?.EventName || '';
+    refreshOutputField('output-event', eventname);
+
+    const title = timetablePart?.Name || '';
+    refreshOutputField('output-title', title);
+    const titleField = document.getElementById('output-title');
+    if (titleField) {
+      titleField.style.fontWeight = 'bold';
+      titleField.style.fontSize = '1.1em';
+      titleField.style.setProperty('text-align', 'left', 'important');
+      titleField.style.paddingLeft = '10px';
+    }
+    
+    if (entry?.vaulter.length === 1) {
+      const vaultername = entry?.vaulter[0]?.Name || '';
+      refreshOutputField('output-vaulter', vaultername);
+      const nation = entry?.vaulter[0]?.Nationality || '';
+      refreshOutputField('output-nation', nation);
+    } else if (entry?.vaulter.length > 2) {
+      let i = 0;
+      entry?.vaulter.forEach(element => {
+        const fieldName = 'output-vaulter' + (i+1);
+        refreshOutputField(fieldName, element?.Name || '');
+        i++;
+      });
+      refreshOutputField('output-teamName', entry?.teamName || '');
+    } else if (entry?.vaulter.length === 2) {
+      const vaultername1 = entry?.vaulter[0]?.Name || '';
+      refreshOutputField('output-vaulter1', vaultername1);
+      const vaultername2 = entry?.vaulter[1]?.Name || '';
+      refreshOutputField('output-vaulter2', vaultername2);
+    } else {
+      refreshOutputField('output-vaulter', '');
+    }
+
+    const t1 = document.getElementById('input-t1');
+    if (t1) {
+      t1.readOnly = true;
+    }
+
+    const horse = entry?.horse?.Horsename || '';
+    refreshOutputField('output-horse', horse);
+
+    const lunger = entry?.lunger?.Name || '';
+    refreshOutputField('output-lunger', lunger);
+    
+    const startObj = entry.vaulter[0].ArmNr.find(s => s && String(s.eventID) === String(event?._id));
+    const startnumber = startObj?.armNumber || '';
+    refreshOutputField('output-armnr', startnumber);
+
+    refreshOutputField('output-judgeName', JudgeName);
+    refreshOutputField('output-judges-table', JudgesTable);
+
+    let startNr = 0;
+    timetablePart.StartingOrder.forEach(element => {
+      if (String(element.Entry) === String(entry._id)) {
+        startNr = element.Order;
+      }
+    });
+    refreshOutputField('output-startno', startNr);
+
+    <% if (scoresheetTemp.typeOfScores == "artistic" && scoresheetTemp.TestType.includes("free test")) { %>
+      refreshOutputField('output-CH', window.scoresheetConfig.artisticCH*100 + '%');
+      refreshOutputField('output-c1', window.scoresheetConfig.artisticC1*100 + '%');
+      refreshOutputField('output-c2', window.scoresheetConfig.artisticC2*100 + '%');
+      refreshOutputField('output-c3', window.scoresheetConfig.artisticC3*100+ '%');
+      refreshOutputField('output-c4', window.scoresheetConfig.artisticC4*100 + '%');
+    <% } else if(scoresheetTemp.typeOfScores == "artistic" && scoresheetTemp.TestType.includes("technical test")){ %>
+      refreshOutputField('output-CH', window.scoresheetConfig.artistictechCH*100 + '%');
+      refreshOutputField('output-t1', window.scoresheetConfig.artisticT1*100 + '%');
+      refreshOutputField('output-t2', window.scoresheetConfig.artisticT2*100 + '%');
+      refreshOutputField('output-t3', window.scoresheetConfig.artisticT3*100+ '%');
+    <% } else if (scoresheetTemp.typeOfScores == "technical" && scoresheetTemp.TestType.includes("free test")){%>
+      refreshOutputField('output-rmultipler', window.scoresheetConfig.Rmultipler);
+      refreshOutputField('output-dmultipler', window.scoresheetConfig.Dmultipler);
+      refreshOutputField('output-mmultipler', window.scoresheetConfig.Mmultipler);
+      refreshOutputField('output-emultipler', window.scoresheetConfig.Emultipler);
+    <%} %>
+
+    const records = document.getElementById('input-records');
+    transformElement(records, 10);
+    const techrecords = document.getElementById('input-techrecords');
+    transformElement(techrecords, 6.3);
+  });
+</script>

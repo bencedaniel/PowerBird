@@ -1,0 +1,101 @@
+<div class="container my-4 border border-black border-1 border-opacity-10 rounded p-3  shadow bg-primary bg-opacity-10 " style="max-width: 80vh;">
+
+<h1 class="text-center mb-3">Edit Permission</h1>
+
+<form action="/admin/editPermission/<%= formData._id %>" method="POST">
+    <div class="row justify-content-center g-3 m-auto">
+        <div class="col-lg-10">
+
+        </div>
+        <div class="col-md-12">
+            <div class="form-floating">
+                <input type="text" class="form-control shadow-none" id="name" name="name" placeholder="name"
+                    autocomplete="off" value="<%= formData ? formData.name : "" %>" disabled>
+                <label for="name" class="form-label">Name</label>
+            </div>
+        </div>
+
+         <div class="col-md-12">
+            <div class="form-floating">
+                <input type="text" class="form-control shadow-none" id="displayName" name="displayName" placeholder="displayName"
+                    autocomplete="off" value="<%= formData ? formData.displayName : "" %>">
+                <label for="displayName" class="form-label">Display Name</label>
+            </div>
+        </div>
+
+        <div class="col-md-12 bg-secondary bg-opacity-10 p-3 rounded mt-3">
+  <label class="form-label mb-2">Attached URLs</label>
+    <div class="d-flex justify-content-between w-100">
+    <div class="w-50 text-center"><label class="form-label mb-2 "> URL</label></div>
+    <div class="w-50 text-center me-5"><label class="form-label mb-2 "> Parent</label></div>
+
+  </div>
+  <div id="urlList"></div>
+
+  <button type="button" class="btn btn-sm btn-success mt-2" onclick="addUrlInput()">+ Add URL</button>
+</div>
+
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Edit</button>
+
+        </div>
+
+        </div>
+
+</form>
+
+<script>
+  const urlList = document.getElementById('urlList');
+
+  function reindexUrlInputs() {
+    Array.from(urlList.children).forEach((wrapper, idx) => {
+      wrapper.dataset.index = idx;
+      const urlInput = wrapper.querySelector('input[name^="attachedURL"]');
+      const parentInput = wrapper.querySelectorAll('input[name^="attachedURL"]')[1];
+      if (urlInput) urlInput.name = `attachedURL[${idx}][url]`;
+      if (parentInput) parentInput.name = `attachedURL[${idx}][parent]`;
+    });
+  }
+
+  function addUrlInput(value = '', parentvalue = '') {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('input-group', 'mb-2');
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = `attachedURL[][url]`; // temporary name, will be reindexed
+    input.classList.add('form-control');
+    input.placeholder = 'Enter URL';
+    input.value = value;
+
+    const parentinput = document.createElement('input');
+    parentinput.type = 'text';
+    parentinput.name = `attachedURL[][parent]`; // temporary name
+    parentinput.classList.add('form-control');
+    parentinput.placeholder = 'Enter Parent URL';
+    parentinput.value = parentvalue;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.classList.add('btn', 'btn-danger');
+    btn.textContent = 'Remove';
+    btn.onclick = () => {
+      wrapper.remove();
+      reindexUrlInputs();
+    };
+
+    wrapper.appendChild(input);
+    wrapper.appendChild(parentinput);
+    wrapper.appendChild(btn);
+
+    urlList.appendChild(wrapper);
+    reindexUrlInputs();
+  }
+
+  // populate from server-provided data safely
+  (function initAttachedURLs() {
+    const existing = <%- JSON.stringify(formData && formData.attachedURL ? formData.attachedURL : []) %>;
+    if (Array.isArray(existing) && existing.length) {
+      existing.forEach(u => addUrlInput(u.url || '', u.parent || ''));
+    }
+  })();
+</script>
