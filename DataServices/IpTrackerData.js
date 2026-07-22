@@ -6,6 +6,12 @@ import { logDb, logAuth } from '../logger.js';
 import { FAILED_LOGINS_PER_IP, BAN_TIME } from '../config/env.js';
 import IpTracker from '../models/IpTracker.js';
 
+
+/**
+ * IP-cím ellenőrzése és új rekord létrehozása, ha nem létezik.
+ * @param {string} ipAddress - Az IP-cím, amit ellenőrizni kell.
+ * @returns {Promise<Object>} - Az IP-cím rekordja.
+ */
 export async function checkIPandCreateNew(ipAddress) {
     const existingIp = await IpTracker.findOne({ ip: ipAddress });
     if (!existingIp) {
@@ -28,6 +34,11 @@ export async function checkIPandCreateNew(ipAddress) {
     await existingIp.save();
     return existingIp;
 }
+/**
+ * IP-cím kitiltásának ellenőrzése.
+ * @param {string} ipAddress - Az IP-cím, amit ellenőrizni kell.
+ * @returns {Promise<boolean>} - Igaz, ha az IP-cím kitiltott, különben hamis.
+ */
 export async function checkIPandCreateNewHard(ipAddress, attempts) {
     const existingIp = await IpTracker.findOne({ ip: ipAddress });
     if (!existingIp) {
@@ -51,6 +62,11 @@ export async function checkIPandCreateNewHard(ipAddress, attempts) {
     return existingIp;
 }
 
+/**
+ * IP-cím kitiltásának ellenőrzése.
+ * @param {string} ipAddress - Az IP-cím, amit ellenőrizni kell.
+ * @returns {Promise<boolean>} - Igaz, ha az IP-cím kitiltott, különben hamis.
+ */
 export async function checkIPbanStatus(ipAddress) {
     const ipRecord = await IpTracker.findOne({ ip: ipAddress });
     if (!ipRecord) {
@@ -61,12 +77,21 @@ export async function checkIPbanStatus(ipAddress) {
     }
     return false;
 }
-
+/**
+ * IP-cím rekordjának lekérése.
+ * @param {string} ipAddress - Az IP-cím, amit lekérdezni kell.
+ * @returns {Promise<Object|null>} - Az IP-cím rekordja vagy null, ha nem található.
+ */
 
 export async function listIPRecords() {
     const ipRecords = await IpTracker.find({});
     return ipRecords;
 }
+/**
+ * IP törlése az adatbázisból az azonosító alapján.
+ * @param {string} id - Az IP rekord azonosítója.
+ * @returns {Promise<boolean>} - Igaz, ha a rekord sikeresen törölve lett, különben hamis.
+ */
 export async function deleteIPRecord(id) {
     const ipRecord = await IpTracker.findById(id);
     if (ipRecord) {
@@ -79,7 +104,11 @@ export async function deleteIPRecord(id) {
 
     return false;
 }
-
+/**
+ * IP törlése az adatbázisból az IP-cím alapján.
+ * @param {string} ipAddress - Az IP-cím, amit törölni kell.
+ * @returns {Promise<boolean>} - Igaz, ha a rekord sikeresen törölve lett, különben hamis.
+ */
 export async function deleteIPRecordbyIP(ipAddress) {
     const ipRecord = await IpTracker.findOne({ ip: ipAddress });
     if (ipRecord) {

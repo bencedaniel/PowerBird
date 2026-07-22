@@ -1,6 +1,10 @@
 import { Log } from '../models/Log.js';
 import { logDb, logError } from '../logger.js';
 
+/**
+ * Logok lekérése az adatbázisból, a legfrissebbtől a legrégebbi felé rendezve.
+ * @returns {Promise<Array>} - A logok listája.
+ */
 export async function listLogs() {
     try {
         const logs = await Log.find().sort({ timestamp: -1 }) // Limit to the last 100 logs

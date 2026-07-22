@@ -102,6 +102,13 @@ export async function resetBan(userId) {
     
     return user;
 }
+/**
+ * Felhasználó kétfaktoros hitelesítésének titkos kulcsának frissítése
+ * @param {string} userId - A felhasználó azonosítója
+ * @param {string} secret - Az új titkos kulcs
+ * @returns {Promise<Object>} - A frissített felhasználó
+ * @throws {Error} - Ha a felhasználó nem található
+ */
 
 export async function updateUserSecret(userId, secret) {
     const user = await User.findById(userId);
@@ -115,6 +122,12 @@ export async function updateUserSecret(userId, secret) {
     
     return user;
 }
+/**
+ * Felhasználó kétfaktoros hitelesítésének engedélyezése
+ * @param {string} userId - A felhasználó azonosítója
+ * @returns {Promise<Object>} - A frissített felhasználó
+ * @throws {Error} - Ha a felhasználó nem található
+ */
 
 export async function enableTwoFactorForUser(userId) {
     const user = await User.findById(userId);
@@ -128,7 +141,12 @@ export async function enableTwoFactorForUser(userId) {
     
     return user;
 }
-
+/**
+ * Felhasználó kétfaktoros hitelesítésének letiltása
+ * @param {string} userId - A felhasználó azonosítója
+ * @returns {Promise<Object>} - A frissített felhasználó
+ * @throws {Error} - Ha a felhasználó nem található
+ */
 export async function disableTwoFactorForUser(userId) {
     const user = await User.findById(userId);
     if (!user) {
@@ -142,18 +160,31 @@ export async function disableTwoFactorForUser(userId) {
     
     return user;
 }
-
+/**
+ * Token hozzáadása a 2FA engedélyezett, de nem hitelesített felhasználók listájához
+ * @param {string} userId - A felhasználó azonosítója
+ * @param {string} token - A hozzáadandó token
+ * @returns {Promise<void>}
+ */
 export async function addTokenTo2FAunauth(userId,token) {
     const newToken = new UnauthToken({ userId });
     await newToken.save();
     logDb('2FA_UNAUTH_ADD', `Added token to 2FA unauth list for user: ${userId}`, true);
 }
-
+/**
+ * Token eltávolítása a 2FA engedélyezett, de nem hitelesített felhasználók listájából
+ * @param {string} userId - A felhasználó azonosítója
+ * @returns {Promise<void>}
+ */
 export async function removeTokenFrom2FAunauth(userId) {
     await UnauthToken.deleteOne({ userId });
     logDb('2FA_UNAUTH_REMOVE', `Removed token from 2FA unauth list for user: ${userId}`, true);
 }
-
+/**
+ * Ellenőrzi, hogy a felhasználó tokenje szerepel-e a 2FA engedélyezett, de nem hitelesített felhasználók listájában
+ * @param {string} userId - A felhasználó azonosítója
+ * @returns {Promise<boolean>} - Igaz, ha a token szerepel a listában, különben hamis
+ */
 export async function checkTokenIn2FAunauth(userId) {
     const tokenEntry = await UnauthToken.findOne({ userId });
     if (tokenEntry) {

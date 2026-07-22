@@ -4,6 +4,11 @@ import adminRouter from './adminRouter.js';
 import alertRouter from './alertRouter.js';
 import helpMessageRouter from './helpMessageRouter.js';
 import twoFaRouter from './twoFaRouter.js';
+import locationRouter from './locationRouter.js';
+import deviceTypeRouter from './deviceTypeRouter.js';
+import basicCheckTypeRouter from './basicCheckTypeRouter.js';
+import defectStatusRouter from './defectStatusRouter.js';
+import defectTypeRouter from './defectTypeRouter.js';
 
 /**
  * Alkalmazás route-regisztráló függvény.
@@ -43,11 +48,19 @@ const setupRoutes = (app) => {
   app.use('/helpmessages', helpMessageRouter);
 
   // ============================================
-  // SCORING & RESULTS ROUTES
+  // LOCATION ROUTES
   // ============================================
+  app.use('/location', locationRouter);
 
 
   app.use('/2fa', twoFaRouter);
+  app.use('/devicetypes', deviceTypeRouter);
+
+  app.use('/basicchecktypes', basicCheckTypeRouter);
+  app.use('/defectstatus', defectStatusRouter);
+  app.use('/defecttypes', defectTypeRouter);
 };
+
+
 
 export default setupRoutes;

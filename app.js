@@ -25,7 +25,7 @@ import { speedTracker } from './middleware/speedTracker.js';
 // ============================================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const version = '0.0.1';
+const version = '0.0.2';
 
 const app = express();
 

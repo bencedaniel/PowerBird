@@ -7,7 +7,7 @@ const basicCheckTypeSchema = new Schema({
     required: true,
     unique: true,
     trim: true // Pl. "Napi rutin", "Féléves hardver teszt"
-  }
+  },
   isActive: {
     type: Boolean,
     default: true

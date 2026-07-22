@@ -5,7 +5,7 @@ import { logger, logOperation, logAuth, logError, logValidation, logWarn } from 
 import { asyncHandler } from '../middleware/asyncHandler.js';
 
 // Dashboard kártyák lekérő függvény importálása
-import { getDashCardsByType } from '../DataServices/dashboardData.js';
+import { getDashCardsByType, getDashBoardStatsData } from '../DataServices/dashboardData.js';
 
 /**
  * Felhasználói dashboard oldal megjelenítése.
@@ -19,8 +19,10 @@ import { getDashCardsByType } from '../DataServices/dashboardData.js';
 const getDashboard = asyncHandler(async (req, res) => {
     // Felhasználói típusú dashboard kártyák lekérése
     const cardsFromDB = await getDashCardsByType('user');
+    const getDashboardStats = await getDashBoardStatsData();
     // Nézet renderelése, session üzenetek, űrlapadatok, jogosultságok és felhasználó átadása
     res.render("dashboard", {
+        dashboardStats: getDashboardStats,
         userrole: req.user.role,
         cardsFromDB,
         successMessage: req.session.successMessage,

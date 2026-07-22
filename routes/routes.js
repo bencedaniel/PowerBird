@@ -108,6 +108,7 @@ router.get('/logout', Verify, auth.Logout);
 
 
 
+
 /**
  * A fő router exportálása, amely tartalmazza az összes alapvető végpontot (dashboard, login, profil, creators, logout, robots.txt).
  */

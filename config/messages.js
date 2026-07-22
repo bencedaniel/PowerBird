@@ -34,6 +34,23 @@ export const MESSAGES = {
 
   // SUCCESS: Sikeres műveletek visszajelzései
   SUCCESS: {
+    DEFECT_TYPE_CREATED: "Defect type created successfully.",
+    DEFECT_TYPE_UPDATED: "Defect type updated successfully.",
+    DEFECT_TYPE_DELETED: "Defect type deleted successfully.",
+    DEFECT_STATUS_CREATED: "Defect status created successfully.",
+    DEFECT_STATUS_UPDATED: "Defect status updated successfully.",
+    DEFECT_STATUS_DELETED: "Defect status deleted successfully.",
+
+    BASIC_CHECK_TYPE_CREATED: "Basic check type created successfully.",
+    BASIC_CHECK_TYPE_UPDATED: "Basic check type updated successfully.",
+    BASIC_CHECK_TYPE_DELETED: "Basic check type deleted successfully.",
+    DEVICE_TYPE_CREATED: "Device type created successfully.",
+    DEVICE_TYPE_UPDATED: "Device type updated successfully.",
+    DEVICE_TYPE_DELETED: "Device type deleted successfully.",
+
+    LOCATION_UPDATED: "Location updated successfully.",
+    LOCATION_CREATED: "Location created successfully.",
+    LOCATION_DELETED: "Location deleted successfully.",
     
     TWO_FA_RESET: "Two-factor authentication reset successfully.",
     TWO_FA_VERIFIED: "Two-factor authentication verified successfully.",
@@ -95,6 +112,12 @@ export const MESSAGES = {
 
   // ERROR: Hibák, hiányzó adatok, érvénytelen műveletek
   ERROR: {
+    DEFECT_TYPE_NOT_FOUND: "Defect type not found.",
+    DEVICE_NOT_FOUND: "Device not found.",
+    DEFECT_STATUS_NOT_FOUND: "Defect status not found.",
+    BASIC_CHECK_TYPE_NOT_FOUND: "Basic check type not found.",
+    DEVICE_TYPE_NOT_FOUND: "Device type not found.",
+    LOCATION_NOT_FOUND: "Location not found.",
     MANDATORY_TWO_FACTOR: "Two-factor authentication is mandatory for your profile!",
     TOKEN_NOT_FOUND: "Token not found.",
     TWO_FA_NOT_ENABLED: "Two-factor authentication is not enabled for this user.",

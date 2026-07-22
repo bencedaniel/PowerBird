@@ -2,6 +2,9 @@
 import DashCards from '../models/DashCards.js';
 // Naplózó függvény importálása
 import { logDb } from '../logger.js';
+import Device from '../models/Device.js';
+import Defect from '../models/Defect.js';
+import DefectStatus from '../models/DefectStatus.js';
 
 /**
  * Minden dashboard kártya lekérése típus szerint, prioritás szerint rendezve
@@ -68,3 +71,28 @@ export const deleteDashCard = async (id) => {
     logDb('DELETE', 'DashCard', `${id}`);
     return card;
 };
+
+
+
+export const getDashBoardStatsData = async () => {
+    const totalDevices = await Device.countDocuments({ isActive: true });
+    // 1. Lekérjük az összes nyitott státusz ID-ját
+    const openStatuses = await DefectStatus.find({ isTerminal: false, isActive: true }).select('_id');
+    const openStatusIds = openStatuses.map(status => status._id);
+    // 2. Megszámoljuk a hibákat, amiknek a státusza benne van az előbbi listában
+    const totalOpenDefects = await Defect.countDocuments({ 
+    currentStatusId: { $in: openStatusIds } 
+    });
+    const LateChecks = "0";
+    const LateBatteryChecks = "0";
+
+    const dashboardStats = {
+        totalDevices,
+        totalOpenDefects,
+        LateBatteryChecks,
+        LateChecks
+    };
+
+    return dashboardStats;
+};
+

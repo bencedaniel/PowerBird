@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
 const defectTypeSchema = new Schema({
   name: {
@@ -20,5 +20,4 @@ const defectTypeSchema = new Schema({
 }, {
   timestamps: true
 });
-
-module.exports = mongoose.model('DefectType', defectTypeSchema);
+export default mongoose.model('DefectType', defectTypeSchema);

@@ -54,6 +54,7 @@ const defectSchema = new Schema({
     required: true,
     trim: true
   },
+
   assignedTo: {
     type: Schema.Types.ObjectId,
     ref: 'User',

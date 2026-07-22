@@ -86,6 +86,12 @@ export async function blacklistToken(token) {
     logDb(`CREATE`, 'Blacklist', `${token.substring(0, 10)}...`);
     return newBlacklist;
 }
+/**
+ * Sikertelen bejelentkezési kísérletek számának növelése és kitiltás ellenőrzése
+ * @param {string} userId - A felhasználó azonosítója
+ * @returns {Promise<void>}
+ * @throws {Error} - Ha a felhasználó nem található
+ */
 
 export async function addFailedLoginAttempt(userId) {
     const user = await User.findById(userId);
@@ -103,6 +109,12 @@ export async function addFailedLoginAttempt(userId) {
 
     await user.save();
 }
+/**
+ * Sikertelen bejelentkezési kísérletek számának visszaállítása és kitiltás feloldása
+ * @param {string} userId - A felhasználó azonosítója
+ * @returns {Promise<void>}
+ * @throws {Error} - Ha a felhasználó nem található
+ */
 
 export async function resetFailedLoginAttempts(userId) {
     const user = await User.findById(userId);
@@ -114,6 +126,13 @@ export async function resetFailedLoginAttempts(userId) {
     user.bannedUntil = null; // Kitiltás feloldása
     await user.save();
 }
+
+/**
+ * Ellenőrzi, hogy a felhasználó kitiltott-e
+ * @param {string} userId - A felhasználó azonosítója
+ * @returns {Promise<boolean>} - Igaz, ha a felhasználó kitiltott
+ * @throws {Error} - Ha a felhasználó nem található
+ */
 
 export async function isUserBanned(userId) {
     const user = await User.findById(userId);

@@ -1,0 +1,37 @@
+<div class="container my-4 border border-black border-1 border-opacity-10 rounded p-3  shadow bg-primary bg-opacity-10 " style="max-width: 80vh;">
+  <h1 class="text-center mb-3">Add new location </h1>
+
+  <form action="/location/new" method="POST">
+    <div class="row justify-content-center g-3 m-auto">
+
+      <!-- Building -->
+      <div class="col-md-12">
+        <div class="form-floating">
+          <input type="text" class="form-control shadow-none" id="building" name="building" placeholder="Building"
+                 value="<%= formData ? formData.building : '' %>" autocomplete="off">
+          <label for="building">Building</label>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-floating">
+          <input type="text" class="form-control shadow-none" id="name" name="name" placeholder="Name"
+                 value="<%= formData ? formData.name : '' %>" autocomplete="off">
+          <label for="name">Name</label>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-floating">
+          <input type="text" class="form-control shadow-none" id="description" name="description" placeholder="Description"
+                 value="<%= formData ? formData.description : '' %>" autocomplete="off">
+          <label for="description">Description</label>
+        </div>
+      </div>
+
+
+      <div class="col-md-12 mt-3">
+        <button type="submit" class="btn btn-primary w-100">Add location</button>
+      </div>
+
+    </div>
+  </form>
+</div>
